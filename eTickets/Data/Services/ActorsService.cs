@@ -33,9 +33,11 @@ namespace eTickets.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public void Update(int Id, Actor newActor)
+        public async Task<Actor> UpdateAsync(int Id, Actor newActor)
         {
-            throw new System.NotImplementedException();
+            _context.Update(newActor);
+            await _context.SaveChangesAsync();
+            return newActor;
         }
 
         public void Delete(int Id)
