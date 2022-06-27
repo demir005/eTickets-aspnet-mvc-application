@@ -2,6 +2,7 @@ using eTickets.Data;
 using eTickets.Data.Services;
 using eTickets.Data.Services.MainInterfaces;
 using eTickets.Data.Services.MainServices;
+using eTickets.Data.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace eTickets
             services.AddScoped<IActorsService, ActorsService>();
             services.AddScoped<IProducersService, ProducersService>();
             services.AddScoped<ICinemasService, CinemasService>();
+            services.AddScoped<IMoviesService, MoviesServices>();
 
             services.AddControllersWithViews();
         }
