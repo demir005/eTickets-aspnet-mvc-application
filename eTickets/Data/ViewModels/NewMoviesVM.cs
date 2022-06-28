@@ -7,6 +7,9 @@ namespace eTickets.Models
 {
     public class NewMoviesVM
     {
+        public int Id { get; set; }
+
+
         [Display(Name = "Movie Name")]
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }

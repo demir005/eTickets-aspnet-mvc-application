@@ -18,7 +18,7 @@ namespace eTickets.Data.Services.Services
 
 
 
-        public async Task<Movies> GetMoviesById(int id)
+        public async Task<Movies> GetMoviesByIdAsync(int id)
         {
             var moviesDetails = await _context.Movies
                 .Include(c => c.Cinema)
@@ -62,6 +62,43 @@ namespace eTickets.Data.Services.Services
                 var newActorMovie = new Actor_Movie()
                 {
                     MovieId = newMovies.Id,
+                    ActorId = actorId
+                };
+
+                await _context.AddAsync(newActorMovie);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateMoviesAsync(NewMoviesVM data)
+        {
+            var dbMovie = await _context.Movies.FirstOrDefaultAsync(n => n.Id == data.Id);
+
+            if (dbMovie != null)
+            {
+                dbMovie.Name = data.Name;
+                dbMovie.Description = data.Description;
+                dbMovie.Price = data.Price;
+                dbMovie.ImageURL = data.ImageURL;
+                dbMovie.CinemaId = data.CinemaId;
+                dbMovie.ProducerId = data.ProducerId;
+                dbMovie.StartDate = data.StartDate;
+                dbMovie.EndDate = data.EndDate;
+                dbMovie.MovieCategory = data.MovieCategory;
+                await _context.SaveChangesAsync();
+            }
+
+            //Remove existing Actors
+            var exsistingActors = _context.Actors_Movies.Where(n => n.MovieId == data.Id).ToList();
+            _context.Actors_Movies.RemoveRange(exsistingActors);
+
+
+            foreach (var actorId in data.ActorsIds)
+            {
+                var newActorMovie = new Actor_Movie()
+                {
+                    MovieId = data.Id,
                     ActorId = actorId
                 };
 
