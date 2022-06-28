@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eTickets.Data;
 
 namespace eTickets.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220628125857_OrderAndOrderItemsAdded")]
+    partial class OrderAndOrderItemsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,29 +199,6 @@ namespace eTickets.Migrations
                     b.ToTable("Producers");
                 });
 
-            modelBuilder.Entity("eTickets.Models.ShoppingCardItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShoppingCardId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("ShoppingCardItems");
-                });
-
             modelBuilder.Entity("eTickets.Models.Actor_Movie", b =>
                 {
                     b.HasOne("eTickets.Models.Actor", "Actor")
@@ -275,15 +254,6 @@ namespace eTickets.Migrations
                     b.Navigation("Movies");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("eTickets.Models.ShoppingCardItem", b =>
-                {
-                    b.HasOne("eTickets.Models.Movies", "Movies")
-                        .WithMany()
-                        .HasForeignKey("MoviesId");
-
-                    b.Navigation("Movies");
                 });
 
             modelBuilder.Entity("eTickets.Models.Actor", b =>
