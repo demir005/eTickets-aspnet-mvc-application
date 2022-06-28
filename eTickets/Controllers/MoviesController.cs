@@ -23,6 +23,20 @@ namespace eTickets.Controllers
             return View(allMovies);
         }
 
+        public async Task<IActionResult> Filter(string searchString)
+        {
+            var allMovies = await _moviesServices.GetAllAsync(n => n.Cinema);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                var filteredResult = allMovies.Where(n => n.Name.Contains(searchString)
+                                  || n.Description.Contains(searchString)).ToList();
+                return View("Index", filteredResult);
+            }
+
+            return View("Index", allMovies);
+        }
+
         //GET Movies/Details/1
         public async Task<IActionResult> Details(int id)
         {
@@ -87,9 +101,9 @@ namespace eTickets.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int Id,NewMoviesVM movies)
+        public async Task<IActionResult> Edit(int Id, NewMoviesVM movies)
         {
-            if(Id != movies.Id)
+            if (Id != movies.Id)
             {
                 return View("NotFound");
             }
