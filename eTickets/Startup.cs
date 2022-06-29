@@ -1,6 +1,7 @@
 using eTickets.Data;
 using eTickets.Data.Cart;
 using eTickets.Data.Services;
+using eTickets.Data.Services.Interfaces;
 using eTickets.Data.Services.MainInterfaces;
 using eTickets.Data.Services.MainServices;
 using eTickets.Data.Services.Services;
@@ -35,6 +36,7 @@ namespace eTickets
             services.AddScoped<IProducersService, ProducersService>();
             services.AddScoped<ICinemasService, CinemasService>();
             services.AddScoped<IMoviesService, MoviesServices>();
+            services.AddScoped<IOrdersService, OrdersService>();
 
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
