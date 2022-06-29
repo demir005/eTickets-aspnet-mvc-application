@@ -10,9 +10,10 @@ namespace eTickets.Data.Cart
 {
     public class ShoppingCart
     {
-        public AppDbContext _context;
-        public string ShoppingCardId { get; set; }
-        public List<ShoppingCardItem> ShoppingCardItems { get; set; }
+        public AppDbContext _context { get; set; }
+
+        public string ShoppingCartId { get; set; }
+        public List<ShoppingCardItem> ShoppingCartItems { get; set; }
 
         public ShoppingCart(AppDbContext context)
         {
@@ -24,22 +25,21 @@ namespace eTickets.Data.Cart
             ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
             var context = services.GetService<AppDbContext>();
 
-            string cardId = session.GetString("cardId") ?? Guid.NewGuid().ToString();
-            session.SetString("CartId", cardId);
+            string cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
+            session.SetString("CartId", cartId);
 
-            return new ShoppingCart(context) { ShoppingCardId = cardId };
-
+            return new ShoppingCart(context) { ShoppingCartId = cartId };
         }
 
         public void AddItemToCart(Movies movie)
         {
-            var shoppingCartItem = _context.ShoppingCardItems.FirstOrDefault(n => n.Movies.Id == movie.Id && n.ShoppingCardId == ShoppingCardId);
+            var shoppingCartItem = _context.ShoppingCardItems.FirstOrDefault(n => n.Movies.Id == movie.Id && n.ShoppingCardId == ShoppingCartId);
 
             if (shoppingCartItem == null)
             {
                 shoppingCartItem = new ShoppingCardItem()
                 {
-                    ShoppingCardId = ShoppingCardId,
+                    ShoppingCardId = ShoppingCartId,
                     Movies = movie,
                     Amount = 1
                 };
@@ -53,11 +53,11 @@ namespace eTickets.Data.Cart
             _context.SaveChanges();
         }
 
-        public void RemoveItemFromCard(Movies movies)
+        public void RemoveItemFromCart(Movies movie)
         {
-            var shoppingCartItem = _context.ShoppingCardItems.FirstOrDefault(n => n.Movies.Id == movies.Id && n.ShoppingCardId == ShoppingCardId);
+            var shoppingCartItem = _context.ShoppingCardItems.FirstOrDefault(n => n.Movies.Id == movie.Id && n.ShoppingCardId == ShoppingCartId);
 
-            if (shoppingCartItem == null)
+            if (shoppingCartItem != null)
             {
                 if (shoppingCartItem.Amount > 1)
                 {
@@ -71,15 +71,13 @@ namespace eTickets.Data.Cart
             _context.SaveChanges();
         }
 
-        public List<ShoppingCardItem> GetShoppingCardItems()
+        public List<ShoppingCardItem> GetShoppingCartItems()
         {
-            return ShoppingCardItems ?? (ShoppingCardItems = _context.ShoppingCardItems.Where(x => x.ShoppingCardId == ShoppingCardId)
-                .Include(n => n.Movies).ToList());
+            return ShoppingCartItems ?? (ShoppingCartItems = _context.ShoppingCardItems.Where(n => n.ShoppingCardId == ShoppingCartId).Include(n => n.Movies).ToList());
         }
 
-        public double GetShoppingCartTotal() =>
-                _context.ShoppingCardItems.Where(n => n.ShoppingCardId == ShoppingCardId)
-                .Select(n => n.Movies.Price * n.Amount).Sum();
+        public double GetShoppingCartTotal() => _context.ShoppingCardItems.Where(n => n.ShoppingCardId == ShoppingCartId).Select(n => n.Movies.Price * n.Amount).Sum();
 
+        
     }
 }
