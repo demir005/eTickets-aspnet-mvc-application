@@ -31,13 +31,24 @@ namespace eTickets.Controllers
             return View(response);
         }
 
-        public async Task<RedirectToActionResult> AddToShoppingCart(int Id)
+        public async Task<IActionResult> AddToShoppingCart(int Id)
         {
             var item = await _moviesService.GetMoviesByIdAsync(Id);
 
             if (item != null)
             {
                 _shoppingCart.AddItemToCart(item);
+            }
+            return RedirectToAction(nameof(ShoppingCart));
+        }
+
+        public async Task<IActionResult> RemoveItemFromShoppingCart(int Id)
+        {
+            var item = await _moviesService.GetMoviesByIdAsync(Id);
+
+            if (item != null)
+            {
+                _shoppingCart.RemoveItemFromCart(item);
             }
             return RedirectToAction(nameof(ShoppingCart));
         }
