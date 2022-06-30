@@ -44,9 +44,16 @@
                     </ul>
 
                     <a class="btn btn-outline-success my-2 my-sm-0" asp-controller="Accounts" asp-action="Login">
-                        <i class="bi bi-box-arrow-in-right">Login</i>
+                        <i class="bi bi-box-arrow-in-right">  Login</i>
                     </a>
 
+                    <span style="padding:5px;"></span>
+
+                    <a class="btn btn-outline-primary my-2 my-sm-0" asp-controller="Accounts" asp-action="Register">
+                        <i class="bi bi-person-plus">  Register</i>
+                    </a>
+
+                    <span style="padding:5px;"></span>
 
                     @*User Profile Section*@
                     <div class="dropdown">
@@ -61,7 +68,13 @@
                             </li>
                         </ul>
                     </div>
+                    <span style="padding:5px;"></span>
 
+                    <form asp-controller="Accounts" asp-action="Logout">
+                        <button class="btn btn-outline-danger my-2 my-sm-0">
+                            <i class="bi bi-box-arrow-in-right">  Log out</i>
+                        </button>
+                    </form>
 
                 </div>
             </div>
