@@ -15,10 +15,15 @@ namespace eTickets.Data.Services.Services
         {
             _context = context;
         }
-        public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
+        public async Task<List<Order>> GetOrdersByUserIdAndRoleAsync(string userId, string userRole)
         {
-            var orders = await _context.Orders.Include(n => n.OrderItems).ThenInclude(n => n.Movies)
-                .Where(n => n.UserId == userId).ToListAsync();
+            var orders = await _context.Orders.Include(n => n.OrderItems).ThenInclude(n => n.Movies).Include(n => n.User)
+                .ToListAsync();
+
+            if(userRole != "Admin")
+            {
+                orders = orders.Where(n => n.UserId == userId).ToList();
+            }
             return orders;
         }
 
@@ -30,9 +35,9 @@ namespace eTickets.Data.Services.Services
                 Email = UserEmailAddress
             };
             await _context.Orders.AddAsync(order);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 var orderItem = new OrderItem()
                 {
@@ -46,6 +51,6 @@ namespace eTickets.Data.Services.Services
             await _context.SaveChangesAsync();
         }
 
-       
+
     }
 }
